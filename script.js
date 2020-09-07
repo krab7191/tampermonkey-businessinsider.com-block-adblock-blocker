@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Business Insider
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Block the adblock blocker blockers!
 // @author       You
 // @match        https://www.businessinsider.com/*
@@ -12,6 +12,7 @@
   'use strict';
 
   let timer;
+  let modalFound = false;
 
   function deleteModalNodes() {
     const modalNode = document.querySelectorAll('div.tp-modal');
@@ -38,11 +39,12 @@
     console.log('Adblock blocker blocker is running...');
     const backdrop = document.querySelectorAll('div.tp-backdrop.tp-active');
     if (backdrop.length > 0) {
+      modalFound = true;
       deleteModalNodes();
       makeBodyScrollable();
-    } else {
+    } else if (modalFound) {
       window.clearTimeout(timer);
       console.log('Adblock block blocking finished!');
     }
-  }, 3000);
+  }, 1000);
 })();
